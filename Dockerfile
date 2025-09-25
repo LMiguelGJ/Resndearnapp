@@ -22,10 +22,7 @@ RUN apt-get update && apt-get install -y \
     dnsutils \
     && rm -rf /var/lib/apt/lists/*
 
-# Configurar DNS y red
-RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf && \
-    echo "nameserver 1.1.1.1" >> /etc/resolv.conf && \
-    echo "nameserver 208.67.222.222" >> /etc/resolv.conf
+
 
 # Trabajamos como root directamente
 USER root
@@ -98,11 +95,25 @@ echo "Iniciando dbus..."\n\
 service dbus start\n\
 echo ""\n\
 \n\
-# Diagnóstico de red\n\
-echo "=== Diagnóstico de conectividad ==="\n\
-echo "Configuración DNS:"\n\
+# Configurar DNS para mejor conectividad\n\
+echo "=== Configurando DNS ==="\n\
+echo "DNS original:"\n\
 cat /etc/resolv.conf\n\
 echo ""\n\
+echo "Agregando servidores DNS adicionales..."\n\
+cp /etc/resolv.conf /etc/resolv.conf.backup\n\
+{\n\
+    echo "nameserver 8.8.8.8"\n\
+    echo "nameserver 1.1.1.1"\n\
+    echo "nameserver 208.67.222.222"\n\
+    cat /etc/resolv.conf.backup\n\
+} > /etc/resolv.conf\n\
+echo "DNS actualizado:"\n\
+cat /etc/resolv.conf\n\
+echo ""\n\
+\n\
+# Diagnóstico de red\n\
+echo "=== Diagnóstico de conectividad ==="\n\
 echo "Probando conectividad..."\n\
 if ping -c 2 8.8.8.8 > /dev/null 2>&1; then\n\
     echo "✅ Conectividad IP: OK"\n\
@@ -113,16 +124,28 @@ fi\n\
 if nslookup google.com > /dev/null 2>&1; then\n\
     echo "✅ Resolución DNS: OK"\n\
 else\n\
-    echo "❌ Problema con DNS"\n\
-    echo "Configurando DNS alternativo..."\n\
-    echo "nameserver 8.8.8.8" >> /etc/resolv.conf\n\
+    echo "❌ Problema con DNS - intentando configuración alternativa"\n\
+    echo "nameserver 8.8.8.8" > /etc/resolv.conf\n\
     echo "nameserver 1.1.1.1" >> /etc/resolv.conf\n\
+    echo "nameserver 208.67.222.222" >> /etc/resolv.conf\n\
+    sleep 2\n\
+    if nslookup google.com > /dev/null 2>&1; then\n\
+        echo "✅ DNS alternativo funcionando"\n\
+    else\n\
+        echo "❌ Problemas persistentes con DNS"\n\
+    fi\n\
 fi\n\
 \n\
 if curl -s --connect-timeout 10 https://cdn-earnapp.b-cdn.net > /dev/null; then\n\
     echo "✅ Acceso a servidores EarnApp: OK"\n\
 else\n\
     echo "❌ No se puede acceder a servidores EarnApp"\n\
+    echo "Intentando con curl alternativo..."\n\
+    if curl -s --connect-timeout 15 --dns-servers 8.8.8.8 https://earnapp.com > /dev/null 2>&1; then\n\
+        echo "✅ Acceso alternativo a EarnApp: OK"\n\
+    else\n\
+        echo "❌ Problemas persistentes de conectividad"\n\
+    fi\n\
 fi\n\
 echo ""\n\
 \n\
