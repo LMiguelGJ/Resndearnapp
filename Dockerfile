@@ -1,12 +1,17 @@
-FROM ubuntu:20.04
+FROM fredblgr/ubuntu-novnc:20.04
 
-# Instalar dependencias básicas y NoVNC
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip supervisor wget novnc websockify xfce4 xfce4-goodies && \
-    rm -rf /var/lib/apt/lists/*
+# Evita prompts interactivos
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Paris
+RUN apt-get update && apt-get install -y tzdata \
+    && ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
 
-# Configurar NoVNC
-EXPOSE 6080
+# Expose NoVNC port
+EXPOSE 80
+
+# Screen resolution
 ENV RESOLUTION 1707x1067
 
+# Start NoVNC
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
