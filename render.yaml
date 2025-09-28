@@ -1,10 +1,22 @@
 services:
   - type: web
-    name: light-desktop
+    name: webtop
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
+      - key: PUID
+        value: "1000"
+      - key: PGID
+        value: "1000"
+      - key: TZ
+        value: "America/Chicago"
       - key: PORT
-        value: 8080
+        value: "3000"
+    mounts:
+      - type: volume
+        name: webtop-config
+        containerPath: /config
+    resources:
+      memory: 2gb  # equivale a shm_size: 2gb
