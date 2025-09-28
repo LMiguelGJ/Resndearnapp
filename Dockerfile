@@ -1,14 +1,12 @@
+# Imagen base
 FROM babim/ubuntu-novnc:latest
 
-# Evitar intentos de cambiar usuario o contraseña
-ENV PASS=ubuntu
-
-# Configuración de pantalla
+# Configuración opcional de pantalla
 ENV DISPLAY_WIDTH=1600 \
     DISPLAY_HEIGHT=900
 
-# Exponer solo el puerto web
+# Exponer puerto web para noVNC
 EXPOSE 6080
 
-# Comando por defecto ya viene con /start.sh
+# Comando por defecto ya viene en la imagen
 CMD ["/bin/bash", "/start.sh"]
