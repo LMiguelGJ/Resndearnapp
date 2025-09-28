@@ -1,14 +1,16 @@
-FROM debian:stable-slim
+# Imagen base Webtop Ubuntu Mate
+FROM ghcr.io/linuxserver/webtop:ubuntu-mate
 
-RUN apt-get update && apt-get install -y \
-    xvfb fluxbox novnc websockify python3 python3-venv python3-pip \
-    && python3 -m venv /opt/venv \
-    && /opt/venv/bin/pip install xpra \
-    && rm -rf /var/lib/apt/lists/*
+# Variables de entorno
+ENV PUID=1000 \
+    PGID=1000 \
+    TZ=America/Chicago
 
-ENV PATH="/opt/venv/bin:$PATH"
+# Volumen para persistencia de configuración
+VOLUME ["/config"]
 
-EXPOSE 8080
+# Exponer el puerto web
+EXPOSE 3000
 
-CMD xvfb-run fluxbox & \
-    xpra start --bind-tcp=0.0.0.0:8080 --html=on --start=fluxbox --exit-with-children
+# Comando por defecto de la imagen Webtop
+CMD ["/init"]
