@@ -1,11 +1,10 @@
-FROM ghcr.io/linuxserver/webtop:ubuntu-mate
+FROM debian:stable-slim
 
-ENV PUID=1000 \
-    PGID=1000 \
-    TZ=America/Chicago
+RUN apt-get update && apt-get install -y \
+    xpra xvfb fluxbox novnc websockify python3 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Render necesita saber cuál es el puerto
-EXPOSE 3000
+EXPOSE 8080
 
-# Obligamos a webtop a iniciarse sobre el puerto 3000
-CMD ["/init"]
+CMD xvfb-run fluxbox & \
+    xpra start --bind-tcp=0.0.0.0:8080 --html=on --start=fluxbox --exit-with-children
