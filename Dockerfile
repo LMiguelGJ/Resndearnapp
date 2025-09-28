@@ -1,16 +1,12 @@
-# Imagen base Webtop Ubuntu Mate
-FROM ghcr.io/linuxserver/webtop:ubuntu-mate
+FROM theasp/novnc:latest
 
-# Variables de entorno
-ENV PUID=1000 \
-    PGID=1000 \
-    TZ=America/Chicago
+# Variables de entorno por defecto
+ENV DISPLAY_WIDTH=1600 \
+    DISPLAY_HEIGHT=900 \
+    RUN_XTERM=no \
+    RUN_FLUXBOX=yes
 
-# Volumen para persistencia de configuración
-VOLUME ["/config"]
+EXPOSE 8080
 
-# Exponer el puerto web
-EXPOSE 3000
-
-# Comando por defecto de la imagen Webtop
-CMD ["/init"]
+# Comando por defecto ya viene con supervisord
+CMD ["/usr/bin/supervisord"]
