@@ -6,8 +6,6 @@ services:
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
-      - key: PASS
-        value: "ubuntu"
       - key: DISPLAY_WIDTH
         value: "1600"
       - key: DISPLAY_HEIGHT
