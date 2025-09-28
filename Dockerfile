@@ -20,9 +20,9 @@ EXPOSE 6080
 
 # CMD para arrancar Xvfb -> x11vnc -> noVNC
 CMD bash -c "\
-    rm -f /tmp/.X1-lock /tmp/.X11-unix/X1; \
+    rm -f /tmp/.X1-lock /tmp/.X11-unix/X1 && \
     Xvfb :1 -screen 0 ${SCREEN_WIDTH}x${SCREEN_HEIGHT}x${SCREEN_DEPTH} & \
-    sleep 2; \
+    sleep 2 && \
     x11vnc -display :1 -nopw -forever -shared & \
-    websockify -D --web=/usr/share/novnc/ 6080 localhost:5900; \
+    websockify --web=/usr/share/novnc/ 6080 localhost:5900 & \
     wait"
