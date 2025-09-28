@@ -1,22 +1,18 @@
 services:
   - type: web
-    name: webtop
+    name: novnc
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
-      - key: PUID
-        value: "1000"
-      - key: PGID
-        value: "1000"
-      - key: TZ
-        value: "America/Chicago"
+      - key: DISPLAY_WIDTH
+        value: "1600"
+      - key: DISPLAY_HEIGHT
+        value: "900"
+      - key: RUN_XTERM
+        value: "no"
+      - key: RUN_FLUXBOX
+        value: "yes"
       - key: PORT
-        value: "3000"
-    mounts:
-      - type: volume
-        name: webtop-config
-        containerPath: /config
-    resources:
-      memory: 2gb  # equivale a shm_size: 2gb
+        value: "8080"
