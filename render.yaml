@@ -12,3 +12,5 @@ services:
         value: "900"
       - key: PORT
         value: "6080"
+    resources:
+      memory: 1gb
