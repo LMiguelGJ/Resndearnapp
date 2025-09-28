@@ -1,10 +1,16 @@
-version: "2.1"
+# ─────────────────────────────────────────────
+# render.yaml
+# ─────────────────────────────────────────────
 services:
-  webtop:
-    buildCommand: "docker build -t render-ultralight ."
+  - type: web
+    name: ubuntu-novnc
+    env: docker
     dockerfilePath: ./Dockerfile
-    image: render-ultralight
-    ports:
-      - 6080:6080
-    restart: always
+    plan: free
     autoDeploy: true
+    ports:
+      - port: 6080
+        protocol: http
+    healthCheckPath: /
+    buildCommand: docker build -t ubuntu-novnc .
+    startCommand: docker run -i -t -p 6080:6080 ubuntu-novnc
