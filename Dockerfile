@@ -1,11 +1,12 @@
-# Use the base image
-FROM fredblgr/ubuntu-novnc:20.04
+FROM ubuntu:20.04
 
-# Expose the port on which NoVNC runs (80 inside the container)
-EXPOSE 80
+# Instalar dependencias básicas y NoVNC
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip supervisor wget novnc websockify xfce4 xfce4-goodies && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set the environment variable for screen resolution
+# Configurar NoVNC
+EXPOSE 6080
 ENV RESOLUTION 1707x1067
 
-# Start the command to run NoVNC
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
