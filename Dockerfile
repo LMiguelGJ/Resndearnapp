@@ -1,12 +1,11 @@
-FROM theasp/novnc:latest
+# Usamos la imagen base de babim
+FROM babim/ubuntu-novnc:latest
 
-# Variables de entorno por defecto
-ENV DISPLAY_WIDTH=1600 \
-    DISPLAY_HEIGHT=900 \
-    RUN_XTERM=no \
-    RUN_FLUXBOX=yes
+# Variable opcional para contraseña del escritorio VNC
+ENV PASS=ubuntu
 
-EXPOSE 8080
+# Exponer el puerto 6080 para acceso web (noVNC)
+EXPOSE 6080
 
-# Comando por defecto ya viene con supervisord
-CMD ["/usr/bin/supervisord"]
+# Comando por defecto ya viene configurado en la imagen
+CMD ["/bin/bash", "/start.sh"]
