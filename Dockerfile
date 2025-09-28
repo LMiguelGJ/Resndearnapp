@@ -1,11 +1,14 @@
-# Usamos la imagen base de babim
 FROM babim/ubuntu-novnc:latest
 
-# Variable opcional para contraseña del escritorio VNC
+# Evitar intentos de cambiar usuario o contraseña
 ENV PASS=ubuntu
 
-# Exponer el puerto 6080 para acceso web (noVNC)
+# Configuración de pantalla
+ENV DISPLAY_WIDTH=1600 \
+    DISPLAY_HEIGHT=900
+
+# Exponer solo el puerto web
 EXPOSE 6080
 
-# Comando por defecto ya viene configurado en la imagen
+# Comando por defecto ya viene con /start.sh
 CMD ["/bin/bash", "/start.sh"]
