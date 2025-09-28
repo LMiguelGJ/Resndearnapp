@@ -1,21 +1,20 @@
 # ─────────────────────────────────────────────
-# Dockerfile: Ultra-ligero para Render
+# Dockerfile: Ultra-ligero Ubuntu + Fluxbox + noVNC
 # ─────────────────────────────────────────────
 FROM babim/ubuntu-novnc:latest
 
-# Evitamos LXDE y sudo
-# Usamos solo Fluxbox como gestor de ventanas ligero
+# Instala gestor de ventanas ligero y utilidades X
 RUN apt-get update && \
     apt-get install -y --no-install-recommends fluxbox x11-utils && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configuración del display
+# Variables de entorno para X
 ENV DISPLAY=:1
 ENV SCREEN_WIDTH=1280
 ENV SCREEN_HEIGHT=720
 ENV SCREEN_DEPTH=24
 
-# Puerto de Render para noVNC
+# Puerto expuesto para noVNC
 EXPOSE 6080
 
 # CMD para arrancar Xvfb -> x11vnc -> noVNC
