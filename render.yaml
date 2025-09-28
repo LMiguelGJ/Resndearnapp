@@ -8,5 +8,9 @@ services:
     envVars:
       - key: PASS
         value: "ubuntu"
+      - key: DISPLAY_WIDTH
+        value: "1600"
+      - key: DISPLAY_HEIGHT
+        value: "900"
       - key: PORT
         value: "6080"
