@@ -1,17 +1,16 @@
-FROM fredblgr/ubuntu-novnc:20.04
+FROM ubuntu:20.04
 
-# Evita prompts interactivos
+# Evitar prompts interactivos
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Paris
-RUN apt-get update && apt-get install -y tzdata \
-    && ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
-    && dpkg-reconfigure --frontend noninteractive tzdata
 
-# Expose NoVNC port
-EXPOSE 80
+# Instalar dependencias básicas y NoVNC
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip supervisor wget novnc websockify xfce4 xfce4-goodies tzdata && \
+    rm -rf /var/lib/apt/lists/*
 
-# Screen resolution
+# Configurar NoVNC
+EXPOSE 6080
 ENV RESOLUTION 1707x1067
 
-# Start NoVNC
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
