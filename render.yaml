@@ -1,18 +1,12 @@
 services:
   - type: web
-    name: novnc
+    name: ubuntu-novnc
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
-      - key: DISPLAY_WIDTH
-        value: "1600"
-      - key: DISPLAY_HEIGHT
-        value: "900"
-      - key: RUN_XTERM
-        value: "no"
-      - key: RUN_FLUXBOX
-        value: "yes"
+      - key: PASS
+        value: "ubuntu"
       - key: PORT
-        value: "8080"
+        value: "6080"
