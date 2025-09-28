@@ -1,15 +1,14 @@
 FROM babim/ubuntu-novnc:latest
 
-# Variables de pantalla
+# Variables de pantalla y entorno
 ENV DISPLAY_WIDTH=1600 \
     DISPLAY_HEIGHT=900 \
+    RUN_XTERM=no \
     RUN_FLUXBOX=yes \
-    RUN_XTERM=no
+    PASS=
 
-# Evitamos usar sudo ni scripts de LXDE
-RUN sed -i '/sudo/d' /start.sh \
-    && sed -i '/LXDE/d' /start.sh
-
+# Exponer el puerto web
 EXPOSE 6080
 
-CMD ["/bin/bash", "/start.sh"]
+# Usar el comando por defecto de la imagen
+CMD ["/usr/bin/start-vnc.sh"]
