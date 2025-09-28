@@ -1,14 +1,27 @@
-FROM babim/ubuntu-novnc:latest
+# Usamos Debian slim para mantenerlo ligero
+FROM debian:stable-slim
 
-# Variables de pantalla y entorno
-ENV DISPLAY_WIDTH=1600 \
-    DISPLAY_HEIGHT=900 \
-    RUN_XTERM=no \
-    RUN_FLUXBOX=yes \
-    PASS=
+# Instalamos dependencias básicas
+RUN apt-get update && apt-get install -y \
+    xvfb \
+    x11vnc \
+    fluxbox \
+    xterm \
+    novnc \
+    websockify \
+    && rm -rf /var/lib/apt/lists/*
 
-# Exponer el puerto web
+# Configuramos variables de pantalla
+ENV DISPLAY=:1
+ENV SCREEN_WIDTH=1280
+ENV SCREEN_HEIGHT=720
+ENV SCREEN_DEPTH=24
+
+# Exponemos el puerto noVNC
 EXPOSE 6080
 
-# Usar el comando por defecto de la imagen
-CMD ["/usr/bin/start-vnc.sh"]
+# Comando de inicio
+CMD Xvfb $DISPLAY -screen 0 ${SCREEN_WIDTH}x${SCREEN_HEIGHT}x${SCREEN_DEPTH} & \
+    fluxbox & \
+    x11vnc -display $DISPLAY -nopw -forever -shared & \
+    websockify -D --web=/usr/share/novnc/ 6080 localhost:5900
