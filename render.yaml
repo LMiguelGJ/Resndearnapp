@@ -1,16 +1,14 @@
+version: "2.1"
 services:
-  - type: web
-    name: ubuntu-novnc
-    env: docker
-    plan: free
+  webtop:
+    buildCommand: "docker build -t render-ultralight ."
     dockerfilePath: ./Dockerfile
+    image: render-ultralight
+    env:
+      - key: DISPLAY
+        value: ":1"
+    ports:
+      - 6080:6080
+    restart: always
+    shm_size: "512mb"
     autoDeploy: true
-    envVars:
-      - key: DISPLAY_WIDTH
-        value: "1600"
-      - key: DISPLAY_HEIGHT
-        value: "900"
-      - key: PORT
-        value: "6080"
-    resources:
-      memory: 1gb
